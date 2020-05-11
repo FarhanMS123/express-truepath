@@ -15,5 +15,16 @@
   "dependencies": {
     "resolve-path": "^1.4.0"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/FarhanMS123/express-truepath.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FarhanMS123/express-truepath/issues"
+  },
+  "homepage": "https://github.com/FarhanMS123/express-truepath#readme"
 }
