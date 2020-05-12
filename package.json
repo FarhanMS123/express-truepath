@@ -1,5 +1,5 @@
 {
-  "name": "@fmsfelis123/express-truepath",
+  "name": "express-truepath",
   "version": "1.0.2",
   "description": "get filepath from url",
   "main": "index.js",
