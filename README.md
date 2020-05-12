@@ -56,3 +56,7 @@ http_server.on("request", (req, res)=>{
 });
 
 ```
+
+## LICENSE
+
+This package is using MIT License.
