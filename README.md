@@ -5,7 +5,7 @@ Parsing url to be root file.
 ## Installation
 
 ```
-npm install @fmsfelis123/express-truepath
+npm install express-truepath
 ```
 
 ## Documentation
