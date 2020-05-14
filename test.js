@@ -1,3 +1,1 @@
-// "use strict";
-
-x = "hello";
+var y = require("./index.js");

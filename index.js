@@ -8,6 +8,13 @@ var config = {
     index: ["index.html", "default.html"],
     follow_link: true
 }
+
+/**
+ * get the filepath from system by the url
+ * @param {string} root - the path of root's public folder from server system
+ * @param {string} url  - url path from request
+ * @param {object} config 
+ */
 function getTruePath(root=process.cwd(), url="/", config=config){
     var index = config.index;
     var follow_link = config.follow_link;
