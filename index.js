@@ -1,23 +1,36 @@
+/**
+ * express-truepath v1.0.1
+ * by FarhanMS123
+ * License MIT
+ */
+
 var util = require("util");
 var path = require("path");
 var fs = require("fs");
 
 var resolvePath = require("resolve-path");
 
-var config = {
+var _config = {
     index: ["index.html", "default.html"],
-    follow_link: true
+    follow_link: true,
+    resolveDirectoryURL: true
 }
 
 /**
  * get the filepath from system by the url
- * @param {string} root - the path of root's public folder from server system
- * @param {string} url  - url path from request
- * @param {object} config 
+ * @param {string} root the path of root's public folder from server systems
+ * @param {string} url url path from request
+ * @param {Object} [config]
+ * @param {Array.<string>} config.index get an index file from a directory
+ * @param {boolean} config.follow_link propose a symlink as target link.
+ * @returns {Object} {filepath, dirpath, stat}.filepath, if it is file.
+ * @returns {Object} {filepath, dirpath, stat}.dirpath, the dirname of a file or it is a directory.
+ * @returns {Object} {filepath, dirpath, stat}.stat, a {@link https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_class_fs_stats Stats} from NodeJS
+ * @returns {boolean} false, if the file is not exist
  */
-function getTruePath(root=process.cwd(), url="/", config=config){
-    var index = config.index;
-    var follow_link = config.follow_link;
+function getTruePath(root=process.cwd(), url="/", config=_config){
+    var index = typeof config.index == "object" && config.index.constructor == Array ? config.index : ["index.html", "default.html"];
+    var follow_link = typeof config.follow_link == "boolean" ? config.follow_link : true;
 
     var resolvedRootPath = resolvePath(root, url);
         
@@ -62,17 +75,41 @@ function getTruePath(root=process.cwd(), url="/", config=config){
     }
 };
 
-module.exports = function(root="/", config=config){
+/**
+ * get the filepath from system by the url
+ * @param {string} root the path of root's public folder from server systems
+ * @param {Object} [config]
+ * @param {Array.<string>} config.index get an index file from a directory
+ * @param {boolean} config.follow_link propose a symlink as target link.
+ * @param {boolean} config.resolveDirectoryURL add slashes to an url of directory
+ * 
+ * @returns {Object} express {@link https://expressjs.com/en/4x/api.html#middleware-callback-function-examples middleware}
+ * 
+ */
+function middleware(root="/", config=config){
+    /**
+     * @param {Object} req - HTTP Request
+     * @param {Object} res - HTTP Response
+     * @param {@callback} next - callback
+     */
+    var resolveDirectoryURL = typeof config.resolveDirectoryURL == "boolean" ? config.resolveDirectoryURL : true;
     return function(req,res,next){
+        var do_next = true;
         var truepath = getTruePath(root, req.path, config);
         if(truepath){
             req.filepath = truepath.filepath;
             req.dirpath = truepath.dirpath;
+
+            var urlParse = url.parse(req.originalUrl);
+            if(resolveDirectoryURL && truepath.stat.isDirectory() && urlParse.pathname.substr(-1,1) != "/"){
+                res.redirect(urlParse.pathname + "/" + (urlParse.search ? urlParse.search : ""));
+            }
         }else{
             res.status(404);
         }
-        next();
+        if(do_next) next();
     }
 }
 
-module.exports.getTruePath = getTruePath
+module.exports = middleware;
+module.exports.getTruePath = getTruePath;

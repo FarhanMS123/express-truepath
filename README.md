@@ -21,6 +21,7 @@ var config = { // this is default value
 }
 
 // using as express middleware
+config.resolveDirectoryURL = true; //while the url is a directory, rediredt to a url with a slash at the end.
 var truePath_middleware = truePath(root, config); // config is optional
 
 app.all("/*", truePath_middleware, (req,res,next) => {
