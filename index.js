@@ -12,7 +12,7 @@ var resolvePath = require("resolve-path");
 
 var _config = {
     index: ["index.html", "default.html"],
-    follow_link: true,
+    follow_symlink: true,
     resolveDirectoryURL: true
 }
 
@@ -22,7 +22,7 @@ var _config = {
  * @param {string} url url path from request
  * @param {Object} [config]
  * @param {Array.<string>} config.index get an index file from a directory
- * @param {boolean} config.follow_link propose a symlink as target link.
+ * @param {boolean} config.follow_symlink propose a symlink as target link.
  * @returns {Object} {filepath, dirpath, stat}.filepath, if it is file.
  * @returns {Object} {filepath, dirpath, stat}.dirpath, the dirname of a file or it is a directory.
  * @returns {Object} {filepath, dirpath, stat}.stat, a {@link https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_class_fs_stats Stats} from NodeJS
@@ -30,12 +30,12 @@ var _config = {
  */
 function getTruePath(root=process.cwd(), url="/", config=_config){
     var index = typeof config.index == "object" && config.index.constructor == Array ? config.index : ["index.html", "default.html"];
-    var follow_link = typeof config.follow_link == "boolean" ? config.follow_link : true;
+    var follow_symlink = typeof config.follow_symlink == "boolean" ? config.follow_symlink : true;
 
     var resolvedRootPath = resolvePath(root, url);
         
     if(fs.existsSync(resolvedRootPath)){
-        var fsStat = (follow_link ? fs.statSync : fs.lstatSync)(resolvedRootPath);
+        var fsStat = (follow_symlink ? fs.statSync : fs.lstatSync)(resolvedRootPath);
         if(fsStat.isDirectory()){
             if(typeof index=="object" && index.constructor == Array){
                 var index_filename, index_filepath;
@@ -80,7 +80,7 @@ function getTruePath(root=process.cwd(), url="/", config=_config){
  * @param {string} root the path of root's public folder from server systems
  * @param {Object} [config]
  * @param {Array.<string>} config.index get an index file from a directory
- * @param {boolean} config.follow_link propose a symlink as target link.
+ * @param {boolean} config.follow_symlink propose a symlink as target link.
  * @param {boolean} config.resolveDirectoryURL add slashes to an url of directory
  * 
  * @returns {Object} express {@link https://expressjs.com/en/4x/api.html#middleware-callback-function-examples middleware}

@@ -17,7 +17,8 @@ var truePath = require("express-truepath");
 var root = path.resolve(".", "public");
 var config = { // this is default value
     index: ["index.html", "default.html"],
-    follow_link: true // while it set to true, it will identify symlink as file or folder and follow its link. Otherwise, it would identify as file (or flag) if it set to false.
+    follow_symlink: true, // while it set to true, it will identify symlink as file or folder and follow its link. Otherwise, it would identify as file (or flag) if it set to false.
+    resolveDirectoryURL: true // only works in http/express middleware. see the middleware
 }
 
 // using as express middleware
