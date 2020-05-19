@@ -32,7 +32,7 @@ function getTruePath(root=process.cwd(), url="/", config=_config){
     var index = typeof config.index == "object" && config.index.constructor == Array ? config.index : ["index.html", "default.html"];
     var follow_symlink = typeof config.follow_symlink == "boolean" ? config.follow_symlink : true;
 
-    var resolvedRootPath = resolvePath(root, url);
+    var resolvedRootPath = resolvePath(root, url.substr(1));
         
     if(fs.existsSync(resolvedRootPath)){
         var fsStat = (follow_symlink ? fs.statSync : fs.lstatSync)(resolvedRootPath);
