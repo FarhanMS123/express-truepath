@@ -7,8 +7,9 @@
 var util = require("util");
 var path = require("path");
 var fs = require("fs");
+var url = require("url");
 
-var resolvePath = require("resolve-path");
+//var resolvePath = require("resolve-path");
 
 var _config = {
     index: ["index.html", "default.html"],
@@ -18,8 +19,8 @@ var _config = {
 
 /**
  * get the filepath from system by the url
- * @param {string} root the path of root's public folder from server systems
- * @param {string} url url path from request
+ * @param {string} rootPath the path of root's public folder from server systems
+ * @param {string} urlPath path of url from request (or any)
  * @param {Object} [config]
  * @param {Array.<string>} config.index get an index file from a directory
  * @param {boolean} config.follow_symlink propose a symlink as target link.
@@ -28,11 +29,12 @@ var _config = {
  * @returns {Object} {filepath, dirpath, stat}.stat, a {@link https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_class_fs_stats Stats} from NodeJS
  * @returns {boolean} false, if the file is not exist
  */
-function getTruePath(root=process.cwd(), url="/", config=_config){
+function getTruePath(rootPath=process.cwd(), urlPath="/", config=_config){
     var index = typeof config.index == "object" && config.index.constructor == Array ? config.index : ["index.html", "default.html"];
     var follow_symlink = typeof config.follow_symlink == "boolean" ? config.follow_symlink : true;
 
-    var resolvedRootPath = resolvePath(root, url.substr(1));
+    //var resolvedRootPath = resolvePath(root, url.substr(1));
+    var resolvedRootPath = path.resolve(path.join(path.join(rootPath), path.join(urlPath)));
         
     if(fs.existsSync(resolvedRootPath)){
         var fsStat = (follow_symlink ? fs.statSync : fs.lstatSync)(resolvedRootPath);

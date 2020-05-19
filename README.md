@@ -14,16 +14,15 @@ var path = require("path");
 
 var truePath = require("express-truepath");
 
-var root = path.resolve(".", "public");
+var rootPath = path.resolve(".", "public");
 var config = { // this is default value
     index: ["index.html", "default.html"],
     follow_symlink: true, // while it set to true, it will identify symlink as file or folder and follow its link. Otherwise, it would identify as file (or flag) if it set to false.
-    resolveDirectoryURL: true // only works in http/express middleware. see the middleware
+    resolveDirectoryURL: true // while the url is a directory, redirect to a url with a slash at the end. (middleware only)
 }
 
 // using as express middleware
-config.resolveDirectoryURL = true; //while the url is a directory, rediredt to a url with a slash at the end.
-var truePath_middleware = truePath(root, config); // config is optional
+var truePath_middleware = truePath(rootPath, config); // config is optional
 
 app.all("/*", truePath_middleware, (req,res,next) => {
     // while the file or folder is exist, there would be these propertieses
@@ -33,7 +32,7 @@ app.all("/*", truePath_middleware, (req,res,next) => {
     req.dirpath = "/path/from/the-system/dir1";
     
     ...
-    //your script
+    //your script to handle the file
     ...
 
     next();
@@ -46,7 +45,7 @@ var url = require("url");
 
 http_server.on("request", (req, res)=>{
     var urlPath = url.parse(req.path).pathname;
-    var webTruePath = truePath.getTruePath(root, urlPath, config);
+    var webTruePath = truePath.getTruePath(rootPath, urlPath, config);
     
     // webTruePath is returning filepath, dirpath, and fsStat
     // for fsStat is implement by `fs.statSync`.

@@ -1,6 +1,6 @@
 {
   "name": "express-truepath",
-  "version": "1.0.403",
+  "version": "1.0.500",
   "description": "get filepath from url",
   "main": "index.js",
   "scripts": {
@@ -12,9 +12,7 @@
   ],
   "author": "FarhanMS123",
   "license": "MIT",
-  "dependencies": {
-    "resolve-path": "^1.4.0"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "repository": {
     "type": "git",
