@@ -94,7 +94,6 @@ function middleware(root="/", config=config){
      */
     var resolveDirectoryURL = typeof config.resolveDirectoryURL == "boolean" ? config.resolveDirectoryURL : true;
     return function(req,res,next){
-        var do_next = true;
         var truepath = getTruePath(root, req.path, config);
         if(truepath){
             req.filepath = truepath.filepath;
@@ -107,7 +106,7 @@ function middleware(root="/", config=config){
         }else{
             res.status(404);
         }
-        if(do_next) next();
+        next();
     }
 }
 
