@@ -42,8 +42,8 @@ function getTruePath(rootPath=process.cwd(), urlPath="/", config=_config){
             if(typeof index=="object" && index.constructor == Array){
                 var index_filename, index_filepath;
                 var rds = fs.readdirSync(resolvedRootPath);
-                for(i=0; i<=index.length; i++){
-                    for(j=0; j<=rds.length; j++){
+                for(i=0; i<index.length; i++){
+                    for(j=0; j<rds.length; j++){
                         if(index[i] == rds[j]){
                             index_filename = rds[j];
                             index_filepath = path.join(resolvedRootPath, index_filename);
@@ -79,7 +79,7 @@ function getTruePath(rootPath=process.cwd(), urlPath="/", config=_config){
 
 /**
  * get the filepath from system by the url
- * @param {string} root the path of root's public folder from server systems
+ * @param {string} rootPath the path of root's public folder from server systems
  * @param {Object} [config]
  * @param {Array.<string>} config.index get an index file from a directory
  * @param {boolean} config.follow_symlink propose a symlink as target link.
@@ -88,7 +88,7 @@ function getTruePath(rootPath=process.cwd(), urlPath="/", config=_config){
  * @returns {Object} express {@link https://expressjs.com/en/4x/api.html#middleware-callback-function-examples middleware}
  * 
  */
-function middleware(root="/", config=config){
+function middleware(rootPath="/", config=config){
     /**
      * @param {Object} req - HTTP Request
      * @param {Object} res - HTTP Response
@@ -96,7 +96,7 @@ function middleware(root="/", config=config){
      */
     var resolveDirectoryURL = typeof config.resolveDirectoryURL == "boolean" ? config.resolveDirectoryURL : true;
     return function(req,res,next){
-        var truepath = getTruePath(root, req.path, config);
+        var truepath = getTruePath(rootPath, req.path, config);
         if(truepath){
             req.filepath = truepath.filepath;
             req.dirpath = truepath.dirpath;
