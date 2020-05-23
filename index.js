@@ -97,16 +97,19 @@ function middleware(rootPath="/", config=config){
     var resolveDirectoryURL = typeof config.resolveDirectoryURL == "boolean" ? config.resolveDirectoryURL : true;
     return function(req,res,next){
         var do_next = true;
+        if(resolveDirectoryURL){
+            var truepath = getTruePath(rootPath, req.path, {index:[]});
+            var urlParse = url.parse(req.originalUrl);
+            if(truepath.isDirectory() && urlParse.pathname.substr(-1,1) != "/"){
+                res.redirect(urlParse.pathname + "/" + (urlParse.search ? urlParse.search : ""));
+                do_next = false;
+            }
+        }
+
         var truepath = getTruePath(rootPath, req.path, config);
         if(truepath){
             req.filepath = truepath.filepath;
             req.dirpath = truepath.dirpath;
-
-            var urlParse = url.parse(req.originalUrl);
-            if(resolveDirectoryURL && truepath.stat.isDirectory() && urlParse.pathname.substr(-1,1) != "/"){
-                res.redirect(urlParse.pathname + "/" + (urlParse.search ? urlParse.search : ""));
-                do_next = false;
-            }
         }else{
             res.status(404);
         }
