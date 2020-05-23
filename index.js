@@ -101,8 +101,9 @@ function middleware(rootPath="/", config=config){
             var truepath = getTruePath(rootPath, req.path, {index:[]});
             var urlParse = url.parse(req.originalUrl);
             if(truepath.stat.isDirectory() && urlParse.pathname.substr(-1,1) != "/"){
-                res.redirect(urlParse.pathname + "/" + (urlParse.search ? urlParse.search : ""));
+                res.redirect(urlParse.pathname + "/" + (rlParse.search || ""));
                 do_next = false;
+                return;
             }
         }
 
