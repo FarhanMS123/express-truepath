@@ -1,6 +1,6 @@
 {
   "name": "express-truepath",
-  "version": "1.0.601",
+  "version": "1.0.602",
   "description": "get filepath from url",
   "main": "index.js",
   "scripts": {

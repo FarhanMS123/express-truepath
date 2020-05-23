@@ -106,10 +106,10 @@ function middleware(rootPath="/", config=config){
             }
         }
 
-        var truepath = getTruePath(rootPath, req.path, config);
-        if(truepath){
-            req.filepath = truepath.filepath;
-            req.dirpath = truepath.dirpath;
+        var truepath2 = getTruePath(rootPath, req.path, config);
+        if(truepath2){
+            req.filepath = truepath2.filepath;
+            req.dirpath = truepath2.dirpath;
         }else{
             res.status(404);
         }
